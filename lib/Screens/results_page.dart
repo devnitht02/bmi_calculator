@@ -1,14 +1,19 @@
 import 'package:bmi_calculator/constants.dart';
-import 'package:bmi_calculator/input_page.dart';
+import 'package:bmi_calculator/Screens/input_page.dart';
 import 'package:bmi_calculator/reusable_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'bottom_container.dart';
+import '../components/bottom_container.dart';
 
 class ResultsPage extends StatelessWidget {
-  const ResultsPage({super.key});
+  ResultsPage(
+      {required this.bmiResult,
+      required this.interpretation,
+      required this.resultText});
 
   final int result = 130;
+  final String bmiResult;
+  final String resultText;
+  final String interpretation;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +36,8 @@ class ResultsPage extends StatelessWidget {
         children: <Widget>[
           Expanded(
               child: Container(
-                padding: EdgeInsets.all(15),
-                alignment: Alignment.bottomLeft,
+            padding: EdgeInsets.all(15),
+            alignment: Alignment.bottomLeft,
             child: Text(
               'Your Result',
               style: kTitleTextStyle,
@@ -48,15 +53,15 @@ class ResultsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    'OVERWEIGHT',
+                    resultText.toUpperCase(),
                     style: kResultTextStyle,
                   ),
                   Text(
-                    '50.3',
+                    bmiResult,
                     style: kNumberResultsStyle,
                   ),
                   Text(
-                    'Your BMI results are quite good! keep going!',
+                    interpretation,
                     textAlign: TextAlign.center,
                     style: kFinalParaStyle,
                   ),
@@ -64,7 +69,11 @@ class ResultsPage extends StatelessWidget {
               ),
             ),
           ),
-          BottomContainer(onTap: (){Navigator.pushNamed(context, 'input_page');}, buttonTitle: 'CHECK AGAIN'),
+          BottomContainer(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              buttonTitle: 'RECALCULATE'),
         ],
       ),
     );

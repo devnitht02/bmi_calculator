@@ -1,11 +1,13 @@
+import 'package:bmi_calculator/Screens/results_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'reusable_card.dart';
-import 'card_details.dart';
-import 'constants.dart';
-import 'roundicon_button.dart';
-import 'bottom_container.dart';
+import 'package:bmi_calculator/reusable_card.dart';
+import '../components/card_details.dart';
+import '../constants.dart';
+import '../components/roundicon_button.dart';
+import '../components/bottom_container.dart';
+import 'package:bmi_calculator/calculator_brain.dart';
 
 enum Gender {
   male,
@@ -18,10 +20,10 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  late int height = 165;
-  late int weight = 0;
+  late int height = 180;
+  late int weight = 70;
 
-  late int age = 0;
+  late int age = 40;
   Gender? selectedGender;
 
   @override
@@ -45,7 +47,9 @@ class _InputPageState extends State<InputPage> {
                 Expanded(
                   child: ReusableCard(
                     onPress: () {
-                      selectedGender = Gender.male;
+                      setState(() {
+                        selectedGender = Gender.male;
+                      });
                     },
                     colour: selectedGender == Gender.male
                         ? kActiveCardColor
@@ -226,16 +230,21 @@ class _InputPageState extends State<InputPage> {
             ),
           ),
           BottomContainer(
-            onTap: () {
-              Navigator.pushNamed(context, 'results_page');
-            },
-            buttonTitle: 'CALCULATE',
-          ),
+              buttonTitle: 'CALCULATE',
+              onTap: () {
+                CalculatorBrain calc =
+                    CalculatorBrain(height: height, weight: weight);
+
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ResultsPage(
+                            bmiResult: calc.calculateBMI(),
+                            interpretation: calc.getResultText(),
+                            resultText: calc.getResult())));
+              }),
         ],
       ),
     );
   }
 }
-
-
-
